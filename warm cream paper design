@@ -1,0 +1,624 @@
+# Portfolio Design System: Editorial Cream Style
+
+Oct 5, 2026 · @MAYOR
+
+---
+
+## 1. Purpose and principles
+
+This doc specifies a single-page developer portfolio style: warm cream paper background, a high-contrast serif for headlines with one coral italic word per heading, small monospace labels, hairline rules, pastel app cards, and one dark navy section for contrast. It is reverse-engineered from the reference portfolio kiddobuild.dev (screenshots, October 2026). All values are estimates read from screenshots; confirm exact numbers in DevTools before shipping. Use this doc as the single source when designing new pages, sections or components in this style.
+
+### Five rules that define the look
+
+1. **Cream, not white.** Page background is `#f1efe7`; pure white appears only inside cards and device mockups.
+2. **Serif headline, one italic accent word or phrase in coral per heading.** Never italicize a whole heading.
+3. **Structure is drawn with 1px hairlines and mono micro-labels,** not with boxes, shadows or gradients.
+4. **Color is rationed:** neutrals everywhere, coral for emphasis, pastels only on app tiles, navy for one full-width section.
+5. **Large radius on media and panels, pill shape on buttons and nav,** square-ish on nothing.
+
+**Content model.** Every section carries: a mono section label (number + name), a serif title with italic accent, a one-line supporting sentence in muted grey, then the content block.
+
+---
+
+## 2. Design tokens
+
+Only `#f1efe7` is confirmed (site theme-color meta tag). Every other value is estimated from screenshots.
+
+### Color
+
+| Token | Hex | Use |
+|---|---|---|
+| `--paper` | `#f1efe7` | Page background, text on navy |
+| `--ink` | `#141414` | Headlines, body, primary button fill |
+| `--muted` | `#6b6a64` | Supporting sentences, meta text, captions |
+| `--line` | `#d8d5ca` | 1px hairlines, list dividers, card outlines on cream |
+| `--accent` | `#e8613c` | Italic headline words, section numbers, small highlights |
+| `--navy` | `#1d2b47` | Dark capabilities section background |
+| `--navy-line` | `#34425f` | Hairlines and tile borders on navy |
+| `--navy-muted` | `#9ba5ba` | Body text on navy |
+| `--tile-pink` | `#e8a9dd` | App tile background |
+| `--tile-sand` | `#d8c9a0` | App tile background |
+| `--tile-lilac` | `#c8bdf0` | App tile background |
+| `--tile-mint` | `#a9d6c9` | App tile background |
+
+Pastel tiles: choose a tint that contrasts with the app icon color. Do not use more than four tints on one page. Text on tiles is always `--ink`.
+
+### Typography
+
+| Role | Family (free match) | Desktop size / line | Mobile size / line | Weight | Tracking |
+|---|---|---|---|---|---|
+| Hero H1 | Instrument Serif | 96px / 0.95 | 48px / 1.0 | 400 | -0.025em |
+| Section H2 | Instrument Serif | 64px / 1.0 | 36px / 1.05 | 400 | -0.02em |
+| Product H3 | Instrument Serif | 44px / 1.05 | 30px / 1.1 | 400 | -0.015em |
+| Tile / row title | Instrument Serif | 24px / 1.15 | 22px / 1.15 | 400 | -0.01em |
+| Body | Inter or Geist | 16px / 1.55 | 15px / 1.55 | 400 | 0 |
+| Supporting line | Inter or Geist | 15px / 1.5 | 14px / 1.5 | 400 | 0 |
+| Mono label | JetBrains Mono or Geist Mono | 11px / 1.4 | 10px / 1.4 | 400 | 0.12em, uppercase |
+| Button / nav | Inter or Geist | 14px / 1 | 14px / 1 | 500 | 0 |
+
+**Accent rule:** in every H1/H2/H3, set one word or short phrase in the same serif, italic, `--accent`. Examples from the reference: "actually use.", "home screens.", "point of view.", "building apps.". The rest of the heading stays `--ink`, roman.
+
+### Spacing scale (px)
+
+4, 8, 12, 16, 24, 32, 48, 64, 96, 128, 160. Use 8-step multiples for component gaps; 96–160 for vertical space between sections on desktop, 64–96 on mobile.
+
+### Radius, borders, shadow
+
+| Token | Value | Use |
+|---|---|---|
+| `--r-pill` | `999px` | Buttons, nav pill, tags, icon buttons |
+| `--r-panel` | `28px` | Hero illustration panel, showcase image panels |
+| `--r-card` | `24px` | Pastel app cards, capability tiles |
+| `--r-media` | `16px` | Screenshots inside panels, device frames |
+| `--r-icon` | 22% of icon width | App icons |
+| `--border` | `1px solid --line` | Rules, rows, outlined panels |
+| `--shadow-float` | `0 8px 30px rgba(20,20,20,.12)` | Floating bottom nav only |
+| `--shadow-device` | `0 30px 60px -20px rgba(0,0,0,.25)` | Phone and desktop mockups only |
+
+Cards and sections carry no shadow. Elevation is used only on the floating nav and device mockups.
+
+---
+
+## 3. Layout system
+
+Single long page, one centered column, sections stacked with generous vertical space. All values estimated.
+
+| Property | Desktop (≥1024px) | Mobile (<640px) |
+|---|---|---|
+| Container max width | 1280px, centered | 100% |
+| Side padding | 32px | 20px |
+| Grid | 12 columns, 24px gap | 4 columns, 16px gap |
+| Section vertical padding | 128px top and bottom (96px between closely related blocks) | 72px |
+| Section header block to content | 48px | 32px |
+| Heading to supporting line | 16px | 12px |
+| Media panel aspect ratio | 16:9 to 4:3 | Same, full width |
+
+**Section header pattern (repeats on every section).** A thin top row: mono label at left (`03 — SELECTED WORK`, uppercase, `--muted`, with the number in `--accent`) and a right-aligned mono meta item (year, count or status). Below it, a 1px `--line` rule. Then the serif H2 left-aligned on columns 1–7, and the supporting sentence right-aligned or below on columns 9–12, in `--muted`.
+
+### Page order
+
+| # | Section | Background | Content alignment |
+|---|---|---|---|
+| 0 | Header bar | `--paper` | Name left, availability and location mono text center, email or time right |
+| 1 | Hero | `--paper` | H1 left, two CTAs under it, illustration panel full container width below |
+| 2 | Apps ("Seen on real home screens") | `--paper` | Title left, cards or list below. See section 7 |
+| 3 | Product showcases ("Products with a point of view") | `--paper` | One product per block, stacked; image panels alternate in size |
+| 4 | Capabilities ("One product brain. Four ways to ship.") | `--navy` | Title centered or left, 2×2 bordered grid below |
+| 5 | Closing CTA | `--paper` | Centered H2, one supporting line, one primary button |
+| 6 | Footer | `--paper` | One row: mono links left, small copyright right |
+
+The dark section is the only full-bleed color change on the page. Keep it to one.
+
+---
+
+## 4. Global chrome
+
+Three persistent elements frame the page: a quiet top header, a floating bottom pill nav, and a contextual "skip" chip. Placement is estimated from the screenshots.
+
+| Element | Placement | Spec |
+|---|---|---|
+| Header bar | Top of page, not sticky, 24px top padding | Three zones. Left: name in serif 20px over a mono sub-label (role). Center: two short mono lines (location or availability, last-updated date). Right: mono line (local time or status). Bottom edge: 1px `--line` rule |
+| Anchor row | Directly under header, above hero | Mono 11px uppercase links separated by 24px gaps (Home, Apps, Work, Capabilities, Contact). `--muted`, hover `--ink` |
+| Floating nav | Fixed, bottom center, 24px from viewport bottom | Pill, `--r-pill`, background `--ink` or `--paper` with 1px `--line`, height 48px, padding 6px, `--shadow-float`. Contains 2–4 items: icon-only links plus one filled primary pill ("Book a call") |
+| Skip chip | Fixed, bottom left, appears from section 3 onward | Small pill, mono 10px uppercase label ("Skip to live apps"), 1px `--line`, background `--paper`. Jumps to the apps section |
+| Section counters | Inside each section header row | Mono, `NN — NAME`, number in `--accent` |
+
+### Rules
+
+- Only the floating nav and skip chip are fixed. Nothing else sticks.
+- Floating nav hides on scroll down inside the footer and reappears on scroll up.
+- On `--navy` sections the floating nav keeps its own background so it stays legible; do not recolor it per section.
+- Header contents are text only: no logo mark, no hamburger on desktop.
+
+---
+
+## 5. Section specs
+
+Placement and content slots for each section, top to bottom.
+
+### 5.1 Hero
+
+- Slot order: H1, supporting paragraph, CTA row, three-line principles list, illustration panel, italic caption.
+- **H1:** two lines, left aligned, columns 1–8. Accent phrase on the second line ("actually use.").
+- **Supporting paragraph:** 16px `--muted`, max width 520px, 24px under H1.
+- **CTA row:** primary pill (fill `--ink`, text `--paper`, height 44px, padding 0 20px) plus a text link with an arrow, 12px gap, 32px under the paragraph.
+- **Principles list:** three rows, each a 1px `--line` top border, mono 11px label left and a short sentence right, 12px vertical padding.
+- **Illustration panel:** full container width, radius `--r-panel`, dark background in the `--navy` family, height about 420px desktop. Flat vector scene: a central character, an orbit ellipse, two floating cubes, small mono HUD labels in the corners (coordinates, status). Accent orange used on two or three shapes only.
+- **Caption:** serif italic 15px, `--muted`, right aligned, 16px under the panel.
+
+### 5.2 Apps
+
+- Header pattern from section 3, title "Seen on real home screens." with accent on "home screens."
+- Content is a card grid or a list. Both variants are specified in section 7.
+
+### 5.3 Product showcases
+
+- Header pattern, title "Products with a point of view."
+- One block per product, 128px between blocks. Each block has the same text stack, then media:
+  - a. Mono meta row: `NN — CATEGORY` left, `YEAR · PLATFORM` right.
+  - b. Serif H3 (product name).
+  - c. One-line tagline, `--muted`, max 640px.
+  - d. Mono tag row (stack or keywords), pill outlines, 8px gap.
+  - e. Text link "See product →".
+  - f. Media.
+- Media patterns, alternated down the page:
+  - **Wide panel:** one full-width panel, radius `--r-panel`, saturated flat background (orange, navy) with a mockup or photo card overlapping the panel edge.
+  - **Pair:** two panels side by side, 50/50 minus 24px gap, each with a portrait phone screenshot centered, title and one-line description under each.
+  - **Single:** one panel at 60–70% width, left aligned, with a screenshot or video still.
+
+### 5.4 Capabilities (dark)
+
+- Background `--navy`, 128px vertical padding, text `--paper`.
+- Header pattern with `--navy-line` rule. Title "One product brain. Four ways to ship." with accent on the second sentence.
+- 2×2 grid, outer radius `--r-card`, tiles divided by shared 1px `--navy-line` hairlines (no gaps, no inner radius).
+- Tile: line icon 24px top left, serif title 28px, 2–3 lines of `--navy-muted` body, mono tag row at the bottom. Tile padding 32px, min height 280px.
+- Titles used: Mobile products, AI agents, Web products, Desktop and systems.
+
+### 5.5 Closing CTA
+
+- Centered stack on `--paper`: mono label, serif H2 ("The best work starts with a useful conversation.", accent on "useful conversation."), one supporting sentence (max 480px), one primary pill ("Book 20 minutes"), mono microcopy under it.
+
+### 5.6 Footer
+
+- Single row, 1px top `--line`, 24px padding. Mono 11px links left (email, social handles), copyright right. No columns, no newsletter field.
+
+---
+
+## 6. Components
+
+| Component | Anatomy and size | Default | Hover / focus |
+|---|---|---|---|
+| Primary button | Pill, height 44px, padding 0 20px, Inter 14px 500, optional 16px trailing arrow | Fill `--ink`, text `--paper` | Fill lifts to `#2a2a2a`, arrow moves 3px right. Focus ring: 2px `--accent`, 2px offset |
+| Text link | Inter 14px 500, trailing arrow, 1px underline offset 4px | `--ink`, underline `--line` | Underline turns `--ink`, arrow moves 3px right |
+| Pill tag | Height 26px, padding 0 10px, mono 10px uppercase, 1px `--line` border, transparent fill | `--muted` | `--ink` text, border `--ink` |
+| Mono label | Mono 11px uppercase, 0.12em tracking, optional number in `--accent` | `--muted` | None |
+| Round icon button | 36px circle, 1px `--line` border, 16px icon | `--ink` icon | Fill `--ink`, icon `--paper` |
+| App icon | Square, 56px (list) or 64px (card), radius 22% | Flat color tile with simple glyph | Scale 1.04 |
+| App card (variant 1) | Radius `--r-card`, padding 24px, min height 240px. Top: icon. Middle: serif 24px name, one-line Inter 14px description. Bottom: store buttons as small pills | Fill = one `--tile-*` tint, no border | Lifts 4px (translateY), no shadow change |
+| App row (variant 2) | Full width, height 88px, 1px `--line` top and bottom. Columns: icon 56px, name + one-liner, platform tag, two round icon buttons | Transparent | Row background `rgba(20,20,20,.03)`, name gets accent underline |
+| Showcase text stack | Section 5.3 order, left aligned, max width 640px | n/a | "See product →" follows text link rules |
+| Capability tile | Section 5.4 | Transparent on navy | Background `rgba(255,255,255,.04)` |
+| Floating nav | Section 4 | Pill, `--shadow-float` | Icon items: opacity .6 to 1 |
+
+### Usage rules
+
+- One primary button per viewport. Everything else is a text link or icon button.
+- Never fill a pill tag. Never use more than 4 tags on one block.
+- Icons are line icons, 1.5px stroke, 16 or 24px. No emoji, no filled icon sets.
+- Focus states are always visible (accent ring). Hover alone never carries meaning.
+
+---
+
+## 7. Apps section variants
+
+The reference ships the apps section in more than one layout. The rest of the page (tokens, header, showcases, dark section, CTA) is identical across variants. Build the section as one component with a `variant` prop.
+
+| | Style 1: pastel card grid | Style 2: hairline list |
+|---|---|---|
+| Section title | "Already on real home screens." (accent on "real home screens.") | "Seen on real home screens." (accent on "home screens.") |
+| Following section title | "The right product, on the right surface." | "Products with a point of view." |
+| Structure | One full-width featured card, then a 2-column grid | Single column list, 1 row per app |
+| Item content | App icon, name, one-line description, store buttons | App icon, name, one-line description, platform tag, two round icon buttons |
+| Item height | 220–260px | 88px |
+| Background | One `--tile-*` tint per card, adjacent cards differ | `--paper`, hairline dividers |
+| Grid gap | 16px | None (dividers only) |
+| Height for 8 apps | About 1,100px desktop | About 700px desktop |
+| Hover | Card lifts 4px | Row tint, name underline |
+| Mobile | Single column, full-width cards | Same list, icon buttons collapse to one |
+| Best for | 5–7 apps with distinct, colorful icons; visual first impression | 8+ apps; fast scanning; quieter page |
+
+**Style 1 placement detail.** Featured card first (the strongest app), then pairs left to right. If the count is odd, the last card spans the full width. Card order = strength of the app, not alphabet.
+
+**Style 2 placement detail.** Row columns on desktop: icon (56px) · name and description (flex 1) · platform tag (140px, right aligned) · icon buttons (96px). Description is one line, truncated with an ellipsis.
+
+**Open item.** A third variant was mentioned but only two distinct layouts were provided as screenshots. Add it here as a third column when its screenshot is available.
+
+---
+
+## 8. Motion and interaction
+
+Motion cannot be read from static screenshots. The values below are recommended defaults that fit the style; verify against the live site (DevTools: search for transition, animation, AOS or GSAP) and adjust.
+
+| Interaction | Behavior | Duration / easing |
+|---|---|---|
+| Scroll reveal | Section header and content fade in and rise 16px once, when 15% visible | 600ms, `cubic-bezier(.22,.61,.36,1)` |
+| Stagger | Cards or rows in one group start 60ms apart, max 6 steps | Same easing |
+| Hover (buttons, links, cards) | As specified in section 6 | 180ms, ease-out |
+| Image panels | Inner image scales 1.03 on hover, panel clips overflow | 500ms, ease-out |
+| Hero illustration | Slow ambient loop: orbit rotates, cubes float 6–10px | 12–20s, linear or ease-in-out, infinite |
+| Floating nav | Slides down 16px and fades when hidden | 250ms |
+| Anchor jumps | Smooth scroll, 80px offset for the header | Native `scroll-behavior: smooth` |
+
+### Rules
+
+- Animate only `transform` and `opacity`.
+- Respect `prefers-reduced-motion: reduce`: disable reveals, loops and parallax; keep color changes on hover.
+- No scroll hijacking, no cursor effects, no auto-playing sound.
+
+---
+
+## 9. Responsive behavior
+
+Mobile-first build, three breakpoints. Values are recommended; the reference screenshots confirm only that desktop and mobile layouts both stack to a single column with the same order.
+
+| Breakpoint | Range | Layout changes |
+|---|---|---|
+| sm | <640px | 4-col grid, 20px side padding. Everything single column. Header collapses to name left, one mono line right. Anchor row hidden; floating nav carries navigation |
+| md | 640–1023px | 8-col grid, 24px side padding. Showcase pairs stay side by side, apps cards 2 columns. Capability grid 2×2 |
+| lg | ≥1024px | 12-col grid, 32px side padding, max width 1280px. All desktop specs apply |
+
+### Element behavior
+
+| Element | Mobile treatment |
+|---|---|
+| H1 / H2 / H3 | Sizes from the type table in section 2; use `clamp()` between breakpoints |
+| Hero panel | Full width, height 260px, HUD labels reduced to two |
+| CTA row | Primary pill full width, text link below |
+| Section header row | Mono label and meta stack, rule stays |
+| Showcase pair | Stacks, panels full width, 24px gap |
+| Capability grid | Single column, tiles keep hairline dividers |
+| Floating nav | Same pill, items limited to 3 |
+| Skip chip | Hidden |
+| Tap targets | Minimum 44×44px on all interactive elements |
+
+---
+
+## 10. Imagery, copy, accessibility, checklist, code
+
+### Imagery
+
+- Hero and section art: flat vector illustration, 3–4 colors from the palette, no gradients, no 3D, no stock photos.
+- Product media: real app screenshots inside a device frame (`--r-media`, `--shadow-device`) placed on a saturated flat panel. One photo card per panel at most.
+- App icons: flat, square, rounded at 22%. No drop shadow.
+
+### Copy tone
+
+- First person, short declarative sentences, outcome first, sentence case, no exclamation marks.
+- Headline formula: `[plain phrase] [accent phrase]`. The accent phrase is 1–3 words and carries the point ("people actually use", "on real home screens").
+- Supporting line: one sentence, under 20 words. Tags and meta are nouns only.
+
+### Accessibility
+
+- Estimated contrast: `--muted` on `--paper` about 4.8:1 (passes for body), `--accent` on `--paper` about 3:1 (large text only, 36px and up; never use it for small body text), `--navy-muted` on `--navy` about 5.6:1. Re-measure after final hex values are set.
+- Meaning is never carried by color alone. Every icon button has an `aria-label`. Mono labels that are decorative get `aria-hidden`.
+- Keyboard: visible focus ring, skip link as the first focusable element, logical tab order matching visual order.
+
+### Do
+
+- Keep one accent word per heading, one primary button per viewport, one dark section per page.
+- Use hairlines and spacing to separate content.
+- Keep tile tints distinct between neighbors.
+
+### Do not
+
+- Add shadows to cards, gradients to backgrounds, or a second accent color.
+- Use bold serif, all-caps serif, or italic on whole headings.
+- Use pure white or pure black as page colors.
+- Copy another site's text, logo, images or illustrations. Match structure and style; write and draw your own content.
+
+### Build checklist
+
+- [ ] Fonts loaded (serif, sans, mono) with `font-display: swap`
+- [ ] Tokens defined once (CSS variables or Tailwind config below)
+- [ ] Section header component reused on every section
+- [ ] Apps component with variant prop (card grid, list)
+- [ ] Showcase component with wide, pair, single media modes
+- [ ] Dark capabilities section is the only full-bleed color block
+- [ ] Floating nav and skip chip fixed, hidden on footer
+- [ ] Reduced-motion and focus states tested
+- [ ] Mobile layout checked at 375px and 768px
+- [ ] All hex values replaced with measured values from the reference
+
+### Tokens as CSS variables
+
+```css
+:root {
+  --paper: #f1efe7;
+  --ink: #141414;
+  --muted: #6b6a64;
+  --line: #d8d5ca;
+  --accent: #e8613c;
+  --navy: #1d2b47;
+  --navy-line: #34425f;
+  --navy-muted: #9ba5ba;
+  --tile-pink: #e8a9dd;
+  --tile-sand: #d8c9a0;
+  --tile-lilac: #c8bdf0;
+  --tile-mint: #a9d6c9;
+  --r-pill: 999px;
+  --r-panel: 28px;
+  --r-card: 24px;
+  --r-media: 16px;
+  --shadow-float: 0 8px 30px rgba(20, 20, 20, 0.12);
+  --shadow-device: 0 30px 60px -20px rgba(0, 0, 0, 0.25);
+  --font-serif: "Instrument Serif", serif;
+  --font-sans: "Inter", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+}
+```
+
+### Tokens as Tailwind config (v3)
+
+```js
+// tailwind.config.js
+module.exports = {
+  theme: {
+    extend: {
+      colors: {
+        paper: '#f1efe7',
+        ink: '#141414',
+        muted: '#6b6a64',
+        line: '#d8d5ca',
+        accent: '#e8613c',
+        navy: { DEFAULT: '#1d2b47', line: '#34425f', muted: '#9ba5ba' },
+        tile: { pink: '#e8a9dd', sand: '#d8c9a0', lilac: '#c8bdf0', mint: '#a9d6c9' },
+      },
+      fontFamily: {
+        serif: ['"Instrument Serif"', 'serif'],
+        sans: ['Inter', 'system-ui', 'sans-serif'],
+        mono: ['"JetBrains Mono"', 'ui-monospace', 'monospace'],
+      },
+      borderRadius: { panel: '28px', card: '24px', media: '16px' },
+      boxShadow: {
+        float: '0 8px 30px rgba(20,20,20,.12)',
+        device: '0 30px 60px -20px rgba(0,0,0,.25)',
+      },
+      maxWidth: { page: '1280px' },
+    },
+  },
+};
+```
+
+---
+
+## 11. Page build: HTML, CSS, JS
+
+Plain three-file implementation of sections 2–9. `styles.css` must start with the `:root` block from section 10. Content is placeholder; replace names, copy and images. Mobile-first; breakpoints at 640px and 1024px.
+
+### index.html
+
+```html
+<!doctype html>
+<html lang='en'>
+<head>
+<meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<title>Mayor | Full-stack developer</title>
+<link rel='preconnect' href='https://fonts.googleapis.com'>
+<link rel='preconnect' href='https://fonts.gstatic.com' crossorigin>
+<link href='https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500&family=JetBrains+Mono&display=swap' rel='stylesheet'>
+<link rel='stylesheet' href='styles.css'>
+</head>
+<body>
+<a class='skip' href='#apps'>Skip to apps</a>
+
+<header class='wrap header'>
+  <div><div class='serif name'>Mayor</div><div class='mono'>Full-stack developer</div></div>
+  <div class='mono hide-sm'>Port Harcourt, NG<br>Updated Oct 2026</div>
+  <div class='mono right'>Available for projects</div>
+</header>
+
+<main>
+  <section class='wrap hero'>
+    <h1 class='h1'>I build software people <em>actually use.</em></h1>
+    <p class='lead'>One sentence on what you build and for whom.</p>
+    <div class='cta'>
+      <a class='btn' href='#contact'>Book a conversation <span>→</span></a>
+      <a class='link' href='#work'>See the work <span>→</span></a>
+    </div>
+    <ul class='principles'>
+      <li><span class='mono'>01</span><span>Principle one</span></li>
+      <li><span class='mono'>02</span><span>Principle two</span></li>
+      <li><span class='mono'>03</span><span>Principle three</span></li>
+    </ul>
+    <div class='panel hero-art' role='img' aria-label='Hero illustration'></div>
+    <p class='caption serif'>Original illustration.</p>
+  </section>
+
+  <section class='wrap section reveal' id='apps'>
+    <div class='sec-head'><span class='mono'><b>02</b> — Live apps</span><span class='mono'>2026</span></div>
+    <h2 class='h2'>Seen on real <em>home screens.</em></h2>
+    <ul class='apps'>
+      <li class='app'>
+        <span class='icon' style='background:#5b4bd6'></span>
+        <div><h3 class='serif'>App name</h3><p>One-line description.</p></div>
+        <span class='tag mono'>iOS · Android</span>
+        <a class='ibtn' href='#' aria-label='Open App name'>↗</a>
+      </li>
+      <!-- repeat li per app -->
+    </ul>
+  </section>
+
+  <section class='wrap section reveal' id='work'>
+    <div class='sec-head'><span class='mono'><b>03</b> — Selected work</span><span class='mono'>2026</span></div>
+    <h2 class='h2'>Products with a <em>point of view.</em></h2>
+    <article class='show'>
+      <div class='meta mono'><span>01 — Marketplace</span><span>2026 · Web</span></div>
+      <h3 class='h3'>MayorTech</h3>
+      <p class='lead'>One-line tagline.</p>
+      <div class='tags'><span class='tag mono'>React</span><span class='tag mono'>Node</span></div>
+      <a class='link' href='#'>See product <span>→</span></a>
+      <div class='panel wide' style='background:#e8855a'><img src='shot.png' alt='MayorTech screenshot'></div>
+    </article>
+    <div class='pair'>
+      <article>
+        <div class='panel wide' style='background:#c8bdf0'><img src='shot2.png' alt='Product two'></div>
+        <h3 class='serif' style='font-size:24px;margin-top:16px'>Product two</h3>
+        <p class='lead'>One line.</p>
+      </article>
+      <article>
+        <div class='panel wide' style='background:#a9d6c9'><img src='shot3.png' alt='Product three'></div>
+        <h3 class='serif' style='font-size:24px;margin-top:16px'>Product three</h3>
+        <p class='lead'>One line.</p>
+      </article>
+    </div>
+  </section>
+
+  <section class='navy section reveal' id='capabilities'>
+    <div class='wrap'>
+      <div class='sec-head'><span class='mono'><b>04</b> — Capabilities</span></div>
+      <h2 class='h2'>One product brain. <em>Four ways to ship.</em></h2>
+      <div class='caps' style='margin-top:48px'>
+        <div class='cap'><h3 class='serif'>Mobile products</h3><p>Two lines on this capability.</p><div class='tags'><span class='tag mono'>Flutter</span></div></div>
+        <div class='cap'><h3 class='serif'>AI agents</h3><p>Two lines on this capability.</p><div class='tags'><span class='tag mono'>LLM</span></div></div>
+        <div class='cap'><h3 class='serif'>Web products</h3><p>Two lines on this capability.</p><div class='tags'><span class='tag mono'>React</span></div></div>
+        <div class='cap'><h3 class='serif'>Desktop and systems</h3><p>Two lines on this capability.</p><div class='tags'><span class='tag mono'>Node</span></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class='wrap section center-txt reveal' id='contact'>
+    <span class='mono'><b>05</b> — Contact</span>
+    <h2 class='h2' style='margin-top:16px'>The best work starts with a <em>useful conversation.</em></h2>
+    <p class='lead'>One supporting sentence.</p>
+    <a class='btn' href='mailto:you@example.com'>Book 20 minutes <span>→</span></a>
+  </section>
+</main>
+
+<footer class='wrap foot mono'><span>you@example.com · @handle</span><span>© 2026 Mayor</span></footer>
+
+<nav class='float' aria-label='Quick navigation'>
+  <a href='#apps'>Apps</a><a href='#work'>Work</a><a class='btn-sm' href='#contact'>Book a call</a>
+</nav>
+<script src='main.js'></script>
+</body>
+</html>
+```
+
+### styles.css (after the :root block)
+
+```css
+* { box-sizing: border-box; margin: 0; }
+html { scroll-behavior: smooth; scroll-padding-top: 80px; }
+body { background: var(--paper); color: var(--ink); font: 400 16px/1.55 var(--font-sans); -webkit-font-smoothing: antialiased; }
+.serif { font-family: var(--font-serif); font-weight: 400; }
+.mono { font: 400 10px/1.4 var(--font-mono); letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+.mono b { color: var(--accent); font-weight: 400; }
+em { font-style: italic; color: var(--accent); }
+.wrap { max-width: 1280px; margin: 0 auto; padding: 0 20px; }
+.h1, .h2, .h3 { font-family: var(--font-serif); font-weight: 400; }
+.h1 { font-size: 48px; line-height: 1; letter-spacing: -.025em; }
+.h2 { font-size: 36px; line-height: 1.05; letter-spacing: -.02em; }
+.h3 { font-size: 30px; line-height: 1.1; letter-spacing: -.015em; }
+.lead { color: var(--muted); font-size: 15px; max-width: 520px; margin-top: 16px; }
+.section { padding-top: 72px; padding-bottom: 72px; }
+.sec-head { display: flex; justify-content: space-between; border-bottom: 1px solid var(--line); padding-bottom: 12px; margin-bottom: 48px; }
+.header { display: flex; justify-content: space-between; align-items: flex-start; padding-top: 24px; padding-bottom: 24px; border-bottom: 1px solid var(--line); }
+.header .name { font-size: 20px; }
+.right { text-align: right; }
+.hide-sm { display: none; }
+.hero { padding-top: 48px; }
+.cta { display: flex; align-items: center; gap: 20px; margin-top: 32px; }
+.btn { display: inline-flex; align-items: center; gap: 8px; height: 44px; padding: 0 20px; border-radius: var(--r-pill); background: var(--ink); color: var(--paper); font: 500 14px/1 var(--font-sans); text-decoration: none; transition: background .18s ease-out; }
+.btn:hover { background: #2a2a2a; }
+.btn span, .link span { display: inline-block; transition: transform .18s ease-out; }
+.btn:hover span, .link:hover span { transform: translateX(3px); }
+.link { font: 500 14px/1 var(--font-sans); color: var(--ink); text-decoration: underline; text-decoration-color: var(--line); text-underline-offset: 4px; }
+.link:hover { text-decoration-color: var(--ink); }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.principles { list-style: none; padding: 0; margin-top: 48px; }
+.principles li { display: flex; gap: 24px; padding: 12px 0; border-top: 1px solid var(--line); font-size: 14px; }
+.panel { border-radius: var(--r-panel); overflow: hidden; }
+.hero-art { background: var(--navy); height: 260px; margin-top: 48px; }
+.caption { font-style: italic; font-size: 15px; color: var(--muted); text-align: right; margin-top: 16px; }
+.apps { list-style: none; padding: 0; }
+.app { display: grid; grid-template-columns: 56px 1fr auto; align-items: center; gap: 16px; min-height: 88px; border-top: 1px solid var(--line); transition: background .18s; }
+.app:last-child { border-bottom: 1px solid var(--line); }
+.app:hover { background: rgba(20, 20, 20, .03); }
+.app h3 { font-size: 22px; line-height: 1.15; }
+.app p { font-size: 14px; color: var(--muted); }
+.app .tag { display: none; }
+.icon { width: 56px; height: 56px; border-radius: 22%; }
+.ibtn { display: grid; place-items: center; width: 36px; height: 36px; border: 1px solid var(--line); border-radius: 50%; color: var(--ink); text-decoration: none; transition: .18s; }
+.ibtn:hover { background: var(--ink); color: var(--paper); }
+.tag { display: inline-flex; align-items: center; height: 26px; padding: 0 10px; border: 1px solid var(--line); border-radius: var(--r-pill); }
+.tag:hover { color: var(--ink); border-color: var(--ink); }
+.tags { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0; }
+.meta { display: flex; justify-content: space-between; margin-bottom: 16px; }
+.wide { margin-top: 32px; aspect-ratio: 16 / 9; display: grid; place-items: center; }
+.wide img { width: 70%; border-radius: var(--r-media); box-shadow: var(--shadow-device); transition: transform .5s ease-out; }
+.wide:hover img { transform: scale(1.03); }
+.pair { display: grid; gap: 24px; margin-top: 96px; }
+.navy { background: var(--navy); color: var(--paper); }
+.navy .sec-head { border-color: var(--navy-line); }
+.navy .mono { color: var(--navy-muted); }
+.navy .tag { border-color: var(--navy-line); }
+.caps { display: grid; border: 1px solid var(--navy-line); border-radius: var(--r-card); overflow: hidden; }
+.cap { padding: 32px; min-height: 280px; border-top: 1px solid var(--navy-line); transition: background .18s; }
+.cap:first-child { border-top: 0; }
+.cap:hover { background: rgba(255, 255, 255, .04); }
+.cap h3 { font-size: 28px; margin-bottom: 12px; }
+.cap p { color: var(--navy-muted); font-size: 15px; }
+.center-txt { text-align: center; }
+.center-txt .lead { margin: 16px auto 32px; }
+.foot { display: flex; justify-content: space-between; padding-top: 24px; padding-bottom: 96px; border-top: 1px solid var(--line); }
+.float { position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%); display: flex; align-items: center; gap: 4px; height: 48px; padding: 6px; border-radius: var(--r-pill); background: var(--paper); border: 1px solid var(--line); box-shadow: var(--shadow-float); transition: opacity .25s, transform .25s; z-index: 10; }
+.float a { padding: 0 14px; font: 500 14px/36px var(--font-sans); color: var(--ink); text-decoration: none; border-radius: var(--r-pill); }
+.float .btn-sm { background: var(--ink); color: var(--paper); }
+.float.hide { opacity: 0; transform: translate(-50%, 16px); pointer-events: none; }
+.skip { position: fixed; left: 16px; top: -48px; z-index: 20; padding: 8px 14px; background: var(--paper); border: 1px solid var(--line); border-radius: var(--r-pill); font: 500 13px var(--font-sans); color: var(--ink); }
+.skip:focus { top: 16px; }
+.reveal { opacity: 0; transform: translateY(16px); transition: opacity .6s cubic-bezier(.22, .61, .36, 1), transform .6s cubic-bezier(.22, .61, .36, 1); }
+.reveal.in { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; transition: none; } html { scroll-behavior: auto; } }
+@media (min-width: 640px) {
+  .wrap { padding: 0 24px; }
+  .pair { grid-template-columns: 1fr 1fr; }
+  .caps { grid-template-columns: 1fr 1fr; }
+  .cap { border-top: 0; }
+  .cap:nth-child(n+3) { border-top: 1px solid var(--navy-line); }
+  .cap:nth-child(even) { border-left: 1px solid var(--navy-line); }
+}
+@media (min-width: 1024px) {
+  .wrap { padding: 0 32px; }
+  .h1 { font-size: 96px; line-height: .95; }
+  .h2 { font-size: 64px; }
+  .h3 { font-size: 44px; }
+  .lead { font-size: 16px; }
+  .mono { font-size: 11px; }
+  .section { padding-top: 128px; padding-bottom: 128px; }
+  .hero-art { height: 420px; }
+  .hide-sm { display: block; }
+  .app { grid-template-columns: 56px 1fr 140px 36px; }
+  .app .tag { display: inline-flex; justify-self: end; }
+}
+```
+
+### main.js
+
+```js
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+  });
+}, { threshold: 0.15 });
+document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+const nav = document.querySelector('.float');
+new IntersectionObserver(([e]) => nav.classList.toggle('hide', e.isIntersecting))
+  .observe(document.querySelector('.foot'));
+```
+
+### Swapping to Style 1 (card grid)
+
+Replace `.apps` and `.app` with a grid: `.apps { display: grid; gap: 16px; }`, `@media (min-width: 640px) { .apps { grid-template-columns: 1fr 1fr; } .app:first-child { grid-column: 1 / -1; } }`, `.app { display: flex; flex-direction: column; align-items: flex-start; border: 0; border-radius: var(--r-card); padding: 24px; min-height: 240px; }`, and set each `li` background to a `--tile-*` token. Add `.app:hover { transform: translateY(-4px); }`.
