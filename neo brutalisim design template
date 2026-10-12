@@ -1,0 +1,156 @@
+# Neo-Brutalist Landing Page Design Template
+
+Use this file as the design brief when building any new site in this style. Follow the tokens, components and rules exactly. Replace only the content, brand name and accent usage.
+
+## 1. Instruction block (paste into the builder prompt)
+
+Build a landing page in the neo-brutalist style defined below. Every surface has a thick black border and a hard offset shadow with no blur. Fills are flat, saturated colors on a warm cream dotted background. The hero contains a floating cluster of tilted cards and label tags on the right, which is the signature element. Use the exact tokens, components and section order in this file. Output a single HTML file with CSS variables, no frameworks, responsive at 860px.
+
+## 2. Design tokens
+
+```css
+:root{
+  --bg:#fdf3df;      /* page cream */
+  --paper:#fff8ea;   /* card cream */
+  --ink:#111;        /* text + all borders + shadows */
+  --lime:#c6f51a;    /* highlighter, active state */
+  --orange:#ff5a00;  /* primary buttons, step numbers, "Sent" tags */
+  --teal:#5ee8d5;    /* hero card, accent band */
+  --purple:#7b4dff;  /* closing CTA band, tag */
+  --pink:#ff7ad9;    /* badge, progress bars */
+  --white:#fff;
+  --bw:3px;          /* border width */
+  --r:16px;          /* radius (24px on large panels, 12px on buttons/inputs) */
+  --sh:6px;          /* shadow offset (8px on large panels, 4px on buttons, 3px on chips) */
+  --shadow:var(--sh) var(--sh) 0 var(--ink);
+  --font-head:'Bricolage Grotesque',system-ui,sans-serif;
+  --font-body:'DM Sans',system-ui,sans-serif;
+  --maxw:1120px;
+}
+```
+
+Fonts: Bricolage Grotesque 500/700/800 for headings, buttons, labels. DM Sans 400/500/700 for body. Load from Google Fonts. Fallback acceptable: any heavy geometric grotesque (Outfit, Space Grotesk).
+
+Background: `radial-gradient(rgba(17,17,17,.12) 1px,transparent 1.2px)` at `22px 22px` over `--bg`.
+
+## 3. Typography scale
+
+| Role | Size | Weight | Notes |
+|---|---|---|---|
+| H1 | clamp(2.8rem, 7vw, 5rem) | 800 | line-height 1.02, letter-spacing -0.03em, 3 short lines, last phrase on lime block |
+| H2 | clamp(1.9rem, 4vw, 2.8rem) | 800 | same tracking, sentence ends with a period |
+| H3 | 1.05rem | 800 | letter-spacing -0.01em |
+| Body | .95rem | 400 | line-height 1.5 |
+| Card text | .82rem | 400 | opacity .85 |
+| Fine print | .78rem | 400 | opacity .8 |
+| Badge | .72rem | 800 | uppercase, letter-spacing .06em |
+
+Copy style: short declarative sentences ending in periods. Headlines come in parallel fragments ("No cables. No account. No long setup."). No jargon.
+
+## 4. Core primitives
+
+```css
+.box{background:var(--paper);border:var(--bw) solid var(--ink);border-radius:var(--r);box-shadow:var(--shadow);padding:18px}
+.btn{display:inline-block;font:700 1rem var(--font-head);color:var(--ink);background:var(--white);
+  border:var(--bw) solid var(--ink);border-radius:12px;box-shadow:4px 4px 0 var(--ink);padding:12px 20px;
+  transition:transform .12s,box-shadow .12s}
+.btn:hover{transform:translate(4px,4px);box-shadow:0 0 0 var(--ink)}   /* press effect */
+.btn.primary{background:var(--orange);color:#fff}
+.badge{font:800 .72rem var(--font-head);letter-spacing:.06em;text-transform:uppercase;background:var(--pink);
+  border:var(--bw) solid var(--ink);border-radius:999px;padding:4px 12px}
+.num{min-width:42px;height:34px;background:var(--orange);color:#fff;font:800 1rem var(--font-head);
+  border:var(--bw) solid var(--ink);border-radius:10px;box-shadow:3px 3px 0 var(--ink)}   /* "01" "02" "03" */
+.hl{display:inline-block;background:var(--lime);border:var(--bw) solid var(--ink);border-radius:10px;
+  padding:0 14px 6px;transform:rotate(-1deg)}   /* highlighter headline block */
+```
+
+Rules:
+1. Every visible surface (nav, cards, buttons, chips, inputs, FAQ rows, panels) has `--bw` black border.
+2. Shadows are solid black offsets down-right. Never blurred, never colored.
+3. Shadow size scales with element size: chips 3px, buttons/FAQ 4px, cards 6px, big panels 8px.
+4. Fills are flat. No gradients except the QR checker pattern and the page dot grid.
+5. Primary action is always orange. Secondary is white.
+
+## 5. Signature element: hero floating cluster
+
+This is the most important part of the design. A right-column stage holds absolutely positioned, tilted elements that bob gently.
+
+Two element types:
+- Card (`.card`): colored panel, 3px border, 8px shadow, 20px padding, tilted 4 to 6 degrees. Contents are abstract UI: pill progress bars (lime, pink) or a QR checker block with a pink bar.
+- Tag (`.tag`): small chip with a label, 3px border, 3px shadow, tilted 3 to 5 degrees, opposite direction to nearby cards.
+
+```css
+.stage{position:relative;height:340px}
+.float{position:absolute;transform:rotate(var(--rot,0deg));animation:bob 5s ease-in-out infinite}
+.float:nth-child(2){animation-delay:-1.2s} .float:nth-child(3){animation-delay:-2.4s}
+.float:nth-child(4){animation-delay:-3.2s} .float:nth-child(5){animation-delay:-4s}
+@keyframes bob{0%,100%{transform:translateY(0) rotate(var(--rot,0deg))}50%{transform:translateY(-10px) rotate(var(--rot,0deg))}}
+.card{background:var(--bg-c,var(--teal));border:var(--bw) solid var(--ink);border-radius:var(--r);box-shadow:8px 8px 0 var(--ink);padding:20px}
+.card .bar{height:16px;border:var(--bw) solid var(--ink);border-radius:999px;margin-bottom:12px;background:var(--lime)}
+.card .bar.pink{background:var(--pink);width:62%}
+.qr{width:76px;height:76px;border:var(--bw) solid var(--ink);margin:0 auto 14px;
+  background:conic-gradient(var(--ink) 25%,#fff 0 50%,var(--ink) 0 75%,#fff 0) 0 0/16px 16px}
+.tag{display:inline-block;font:700 .72rem var(--font-head);padding:4px 12px;white-space:nowrap;
+  background:var(--bg-c,var(--white));color:var(--fg,var(--ink));border:var(--bw) solid var(--ink);
+  border-radius:10px;box-shadow:3px 3px 0 var(--ink)}
+```
+
+Default composition (260px wide cards):
+```css
+.c1{top:30px;left:30px;width:260px;--rot:-6deg;--bg-c:var(--teal)}
+.c2{top:150px;right:0;width:260px;--rot:4deg;--bg-c:var(--paper)}
+.t1{top:0;right:20px;--rot:5deg;--bg-c:var(--purple);--fg:#fff}
+.t2{top:150px;left:10px;--rot:-3deg;--bg-c:var(--teal)}
+.t3{bottom:20px;left:130px;--rot:-5deg;--bg-c:var(--orange);--fg:#fff}
+.t4{top:195px;right:30px;--rot:3deg;--bg-c:var(--white)}
+```
+
+Markup:
+```html
+<div class="stage" aria-hidden="true">
+  <div class="float card c1"><div class="bar"></div><div class="bar pink"></div></div>
+  <div class="float card c2"><div class="qr"></div><div class="bar pink"></div></div>
+  <span class="float tag t1">Label</span> <span class="float tag t2">Label</span>
+  <span class="float tag t3">Label</span> <span class="float tag t4">Label</span>
+</div>
+```
+
+Adapting to a new product: keep 2 cards and 3 to 4 tags. Replace card contents with abstract UI that represents the product (bars for lists, a checker for codes, circles for avatars, a grid for dashboards, a bar chart made from bordered rectangles). Tag text should be 1 to 3 words describing states or actions of the product ("Sent!", "Paid", "Synced", "New"). Use at least three different accent colors across the cluster. Disable animation under `prefers-reduced-motion`.
+
+## 6. Section order and structure
+
+1. Nav: logo (lime square with border + wordmark), 3 text links, two buttons right (white, orange). One bordered box with shadow.
+2. Hero: large `.box` (24px radius, 8px shadow), 2 columns (copy 1.1fr, stage 1fr), padding 48px 44px. Left: pink badge, H1 (last phrase `.hl`), lead paragraph, bold one-liner, two buttons, small note. Right: floating cluster.
+3. Benefit trio: 3 `.box` cards, bold one-line title, one short sentence.
+4. How it works: H2 + subline, 3 `.box` cards with orange `.num` chips (01, 02, 03), then one orange button.
+5. Features: H2, 3-column grid of 6 `.box` cards, title + one sentence each.
+6. Accent band: full-width teal panel (24px radius, 8px shadow, 36px padding), H2, paragraph, fine-print note, white button. Used for the trust or differentiator statement.
+7. Use cases: H2, 4-column grid of `.box` cards.
+8. FAQ: H2, `<details>` rows (white, 3px border, 4px shadow, 12px radius), "+" marker, open row turns lime with "×".
+9. Closing CTA: purple panel, white centered H2 and subline, two buttons, then an inner cream `.box` with label, input (3px border, 10px radius) and white button.
+10. Footer: centered small text, bold credit line.
+
+Grid gap 18px. Section top margin 56px. Page padding 20px 16px. Max width 1120px.
+
+## 7. Responsive and accessibility
+
+- Breakpoint 860px: hero to one column, grids to one column, nav links hidden, input row stacks.
+- Stage height 320px on mobile. Keep cards inside the container.
+- Decorative stage is `aria-hidden="true"`.
+- Text is black on light fills, white only on purple and orange. Keep this contrast.
+- `prefers-reduced-motion: reduce` removes the bob animation.
+
+## 8. Do and do not
+
+Do: keep borders thick and consistent, tilt cards and counter-tilt tags, put one lime highlighted phrase in the H1, end headlines with periods, use orange only for primary actions and step numbers.
+
+Do not: add blur shadows, gradients, glass effects, thin 1px borders, pastel low-contrast text, more than one highlighted phrase per headline, or rounded-full buttons (buttons are 12px radius, only badges are pills).
+
+## 9. Swap checklist for a new site
+
+1. Change brand name, logo square color, and wordmark.
+2. Rewrite H1 into 3 short lines with the key idea on the lime block.
+3. Rebuild the hero stage for the new product (section 5).
+4. Rewrite trio, steps, features, band, use cases, FAQ and CTA copy.
+5. Optionally re-map accents (for example primary button from orange to pink) by editing tokens only; keep the lime highlighter and black borders unchanged.
+6. Verify at 1200px and 390px widths.
